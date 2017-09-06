@@ -1,0 +1,8 @@
+{
+  "name": "rcs",
+  "version": "0.0.1",
+  "dependencies": {
+    "line-by-line": "^0.1.5",
+    "mysql2": "^1.2.0"
+  }
+}
