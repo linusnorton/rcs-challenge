@@ -13,7 +13,8 @@ if (cluster.isMaster) {
 
   const Reader = require('line-by-line');
 
-  const reader = new Reader('RCS_R_F_170108_00555.xml', {
+//  const reader = new Reader('data/RCS_R_F_190813_01214.xml', {
+  const reader = new Reader('data/RCS_R_F_180108_00636.xml', {
     encoding: 'ascii',
     skipEmptyLines: true,
     start: 354
@@ -66,7 +67,7 @@ function FlowProcessor() {
 
     line.substring(12, line.length - 2).split(' ').forEach(setProp);
 
-    records.push(currentRecord);
+    records.push(Object.assign({}, currentRecord));
   }
 
   function setProp(prop) {
@@ -76,6 +77,7 @@ function FlowProcessor() {
 
   function processFlow(lines) {
     records = [];
+
     for (let i in lines) {
       const line = lines[i];
       switch (line.charAt(5)) {
@@ -95,13 +97,9 @@ function DB() {
   let buffer = 'INSERT INTO rcs_flow VALUES ';
 
   const db = mysql.createConnection({
-    // host: 'localhost', 
-    // user: 'root',      
-    // password: '',      
-    // database: 'rcs'
-    host: 'challenger-db.test.aws.assertis',
-    user: 'assertis',
-    password: 'assertis',
+    host: 'localhost',
+    user: 'root',
+    password: '',
     database: 'rcs'
   });
 

@@ -12,7 +12,7 @@ if (cluster.isMaster) {
 
   const Reader = require('line-by-line');
 
-  const reader = new Reader('RCS_R_F_170108_00555.xml', {
+  const reader = new Reader('RCS_R_F_190813_01214.xml', {
     encoding: 'ascii',
     skipEmptyLines: true,
     start: 354

@@ -13,7 +13,8 @@ if (cluster.isMaster) {
 
   const Reader = require('line-by-line');
 
-  const reader = new Reader('RCS_R_F_170108_00555.xml', {
+//  const reader = new Reader('data/RCS_R_F_190813_01214.xml', {
+  const reader = new Reader('data/RCS_R_F_180108_00636.xml', {
     encoding: 'ascii',
     skipEmptyLines: true,
     start: 354
@@ -43,9 +44,9 @@ else if (cluster.isWorker) {
 
 function FlowProcessor() {
   const db = mysql.createConnection({
-    host: 'localhost', 
-    user: 'root',      
-    password: '',      
+    host: 'localhost',
+    user: 'root',
+    password: '',
     database: 'rcs'
     // host: 'challenger-db.test.aws.assertis',
     // user: 'assertis',
