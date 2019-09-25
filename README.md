@@ -22,3 +22,16 @@ CREATE TABLE `rcs_flow` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 ```
+
+Optimal MySQL config
+```
+skip-log-bin
+innodb_buffer_pool_instances = 16
+innodb_buffer_pool_size = 8G
+innodb_log_file_size = 4G
+max_connections = 500
+innodb_file_per_table = ON
+innodb_flush_log_at_trx_commit = 2
+innodb_flush_method = O_DIRECT
+innodb_log_buffer_size = 8M
+```
