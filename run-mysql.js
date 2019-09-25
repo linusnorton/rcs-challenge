@@ -1,8 +1,8 @@
 #!/bin/env node
 
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const cluster = require('cluster');
-const numCPUs = 1;//require('os').cpus().length - 4;
+const numCPUs = 2;//require('os').cpus().length - 4;
 
 if (cluster.isMaster) {
   const pool = [];
@@ -14,7 +14,7 @@ if (cluster.isMaster) {
   const Reader = require('line-by-line');
 
 //  const reader = new Reader('data/RCS_R_F_190813_01214.xml', {
-  const reader = new Reader('data/RCS_R_F_180108_00636.xml', {
+  const reader = new Reader('data/mini.xml', {
     encoding: 'ascii',
     skipEmptyLines: true,
     start: 354
@@ -43,7 +43,7 @@ else if (cluster.isWorker) {
 }
 
 function FlowProcessor() {
-  const db = mysql.createConnection({
+  const db = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
@@ -118,7 +118,13 @@ function FlowProcessor() {
   }
 
   function commit() {
-    db.end();
+    if (buffer.length > 30) {
+      db.query(buffer.substr(0, buffer.length - 1))
+        .then(() => db.end());
+    }
+    else {
+      db.end();
+    }
   }
 
   function processFlow(lines) {

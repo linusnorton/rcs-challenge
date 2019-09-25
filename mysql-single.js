@@ -1,8 +1,8 @@
 #!/bin/env node
 
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const Reader = require('line-by-line');
-const reader = new Reader('RCS_R_F_170108_00555.xml', {
+const reader = new Reader('data/mini.xml', {
   encoding: 'ascii',
   skipEmptyLines: true,
   start: 354
@@ -24,7 +24,7 @@ reader.on('end', _ => worker.commit());
 reader.on('error', console.error);
 
 function FlowProcessor() {
-  const db = mysql.createConnection({
+  const db = mysql.createPool({
     host: 'localhost', //challenger-db-ro.test.aws.assertis
     user: 'root',      //assertis
     password: '',      //assertis
@@ -95,7 +95,12 @@ function FlowProcessor() {
   }
 
   function commit() {
-    db.end();
+    if (buffer.length > 30) {
+      db.query(buffer.substr(0, buffer.length - 1)).then(() => db.end());
+    }
+    else {
+      db.end();
+    }
   }
 
   function processFlow(lines) {
